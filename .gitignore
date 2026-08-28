@@ -3,3 +3,8 @@ target/
 .pi-subagents/
 todo/
 openspec/
+
+.codegraph/
+*.swp
+*~
+.DS_Store
