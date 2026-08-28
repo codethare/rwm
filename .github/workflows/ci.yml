@@ -1,0 +1,34 @@
+name: CI
+
+# Least privilege: no write scopes for a build/test-only workflow.
+# npm supply-chain incidents (Sept 2025: debug/chalk/etc. compromised)
+# were amplified by over-privileged tokens and unpinned dependencies.
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  check:
+    name: fmt + clippy + test + audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Rust toolchain
+        uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772 # stable @ v1
+        with:
+          components: clippy, rustfmt
+      - name: System deps
+        run: sudo apt-get update && sudo apt-get install -y pkg-config libwayland-dev libxkbcommon-dev
+      - name: fmt
+        run: cargo fmt --all -- --check
+      - name: clippy
+        run: cargo clippy --all-targets --locked -- -D warnings
+      - name: test
+        run: cargo test --locked
+      - name: cargo audit (RustSec advisory scan)
+        uses: rustsec/audit-check@69366f33c96575abad1ee0dba8212993eecbe998 # v2.0.0

@@ -1,0 +1,11 @@
+version: 2
+updates:
+  # Keep SHA pins in ci.yml current instead of letting them rot.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
