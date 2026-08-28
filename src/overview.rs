@@ -298,7 +298,7 @@ mod tests {
             height: 1080,
         };
         let (cols, cells) = compute_grid(area, 6, 9, 9);
-        let rows = (6 + cols - 1) / cols;
+        let rows = 6_usize.div_ceil(cols);
         assert!(cols * rows >= 6);
         for cell in &cells {
             assert!(cell.x >= area.x && cell.y >= area.y);

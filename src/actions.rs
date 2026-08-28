@@ -93,7 +93,7 @@ mod tests {
     #[test]
     fn action_unit_variant_parses_from_string() {
         let a: KeybindingAction = toml::from_str("action = \"close_window\"")
-            .and_then(|t: TomlAction| Ok(t.action))
+            .map(|t: TomlAction| t.action)
             .unwrap();
         assert_eq!(a, KeybindingAction::CloseWindow);
     }
@@ -101,12 +101,12 @@ mod tests {
     #[test]
     fn action_payload_variant_parses_from_table() {
         let a: KeybindingAction = toml::from_str("action = { adjust_window_width = -0.1 }")
-            .and_then(|t: TomlAction| Ok(t.action))
+            .map(|t: TomlAction| t.action)
             .unwrap();
         assert_eq!(a, KeybindingAction::AdjustWindowWidth(-0.1));
 
         let a: KeybindingAction = toml::from_str("action = { spawn = [\"alacritty\"] }")
-            .and_then(|t: TomlAction| Ok(t.action))
+            .map(|t: TomlAction| t.action)
             .unwrap();
         assert_eq!(a, KeybindingAction::Spawn(vec!["alacritty".into()]));
     }
