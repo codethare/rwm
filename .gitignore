@@ -1,0 +1,5 @@
+target/
+.pi/
+.pi-subagents/
+todo/
+openspec/
